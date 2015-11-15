@@ -1,9 +1,4 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 ## Loading and preprocessing the data
 
 ```r
@@ -13,28 +8,29 @@ activity<-read.csv("activity.csv", stringsAsFactors = FALSE, header = TRUE)
 ## What is mean total number of steps taken per day?
 
 ```r
-hist(activity$steps, 
+activityAgg<-aggregate(steps~date, activity, sum, na.rm=TRUE)
+hist(activityAgg$steps,
      main = "Frequency of Steps per Day", 
      xlab = "Number of steps taken per day",
-     breaks = 12)
+     breaks = 10)
 ```
 
-![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
-
-```r
-mean(activity$steps, na.rm=TRUE)
-```
-
-```
-## [1] 37.3826
-```
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
 
 ```r
-median(activity$steps, na.rm=TRUE)
+mean(activityAgg$steps, na.rm=TRUE)
 ```
 
 ```
-## [1] 0
+## [1] 10766.19
+```
+
+```r
+median(activityAgg$steps, na.rm=TRUE)
+```
+
+```
+## [1] 10765
 ```
 ## What is the average daily activity pattern?
 
@@ -47,7 +43,7 @@ StepAvg$steps<-StepAvg$steps/length(unique(activity$date))
 qplot(interval, steps, data=StepAvg, geom=c("line"))
 ```
 
-![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
 
 ```r
 StepAvg[StepAvg$steps>trunc(max(StepAvg$steps)),]
@@ -70,28 +66,29 @@ sum(is.na(activity$steps)) ##total number missing values
 ```r
 activity2<-activity
 activity2$steps[is.na(activity$steps)]<-StepAvg$steps ## take average steps in interval
-hist(activity2$steps, 
+activity2Agg<-aggregate(steps~date, activity2, sum, na.rm=TRUE)
+hist(activity2Agg$steps, 
      main = "Frequency of Steps per Day (NAs replaced)", 
      xlab = "Number of steps taken per day",
-     breaks = 12)
+     breaks = 10)
 ```
 
-![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png) 
-
-```r
-mean(activity2$steps, na.rm=TRUE)
-```
-
-```
-## [1] 36.73963
-```
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
 
 ```r
-median(activity2$steps, na.rm=TRUE)
+mean(activity2Agg$steps, na.rm=TRUE)
 ```
 
 ```
-## [1] 0
+## [1] 10581.01
+```
+
+```r
+median(activity2Agg$steps, na.rm=TRUE)
+```
+
+```
+## [1] 10395
 ```
 ## Are there differences in activity patterns between weekdays and weekends?
 
@@ -108,4 +105,4 @@ StepAvgPt$steps<-StepAvgPt$steps/length(unique(activity2$date))
 ggplot(StepAvgPt, aes(interval, steps))+geom_line()+facet_wrap(~weekpt, nrow=2)
 ```
 
-![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 

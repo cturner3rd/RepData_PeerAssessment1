@@ -11,12 +11,13 @@ activity<-read.csv("activity.csv", stringsAsFactors = FALSE, header = TRUE)
 ```
 ## What is mean total number of steps taken per day?
 ```{r}
-hist(activity$steps, 
+activityAgg<-aggregate(steps~date, activity, sum, na.rm=TRUE)
+hist(activityAgg$steps,
      main = "Frequency of Steps per Day", 
      xlab = "Number of steps taken per day",
-     breaks = 12)
-mean(activity$steps, na.rm=TRUE)
-median(activity$steps, na.rm=TRUE)
+     breaks = 10)
+mean(activityAgg$steps, na.rm=TRUE)
+median(activityAgg$steps, na.rm=TRUE)
 ```
 ## What is the average daily activity pattern?
 ```{r}
@@ -33,12 +34,13 @@ StepAvg[StepAvg$steps>trunc(max(StepAvg$steps)),]
 sum(is.na(activity$steps)) ##total number missing values
 activity2<-activity
 activity2$steps[is.na(activity$steps)]<-StepAvg$steps ## take average steps in interval
-hist(activity2$steps, 
+activity2Agg<-aggregate(steps~date, activity2, sum, na.rm=TRUE)
+hist(activity2Agg$steps, 
      main = "Frequency of Steps per Day (NAs replaced)", 
      xlab = "Number of steps taken per day",
-     breaks = 12)
-mean(activity2$steps, na.rm=TRUE)
-median(activity2$steps, na.rm=TRUE)
+     breaks = 10)
+mean(activity2Agg$steps, na.rm=TRUE)
+median(activity2Agg$steps, na.rm=TRUE)
 ```
 ## Are there differences in activity patterns between weekdays and weekends?
 ```{r}
